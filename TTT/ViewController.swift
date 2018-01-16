@@ -27,7 +27,11 @@ class ViewController: UIViewController {
     @IBOutlet var buttonBottomRight: UIButton!
     //    Initial player turn, tie condition, and square color
     var turn: String = "red"
+    var tie: Bool?
     var buttonColor = UIColor(white: 0.70, alpha: 1.0)
+    
+    //    Gameboard array to check against win conditions
+    var gameboard = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,14 +45,61 @@ class ViewController: UIViewController {
         
         if turn == "red" {
             buttonColor = UIColor.red
+            gameboard[sender.tag] = 1
             turn = "blue"
         }
         else if turn == "blue" {
             buttonColor = UIColor.blue
+            gameboard[sender.tag] = -1
             turn = "red"
         }
         sender.backgroundColor = buttonColor
-//        winner() - Write winning conditions fuction
+        winner()
+    }
+    
+    func winner() {
+        if
+            gameboard[0] + gameboard[1] + gameboard[2] == 3 ||
+            gameboard[3] + gameboard[4] + gameboard[5] == 3 ||
+            gameboard[6] + gameboard[7] + gameboard[8] == 3 ||
+            gameboard[0] + gameboard[3] + gameboard[6] == 3 ||
+            gameboard[1] + gameboard[4] + gameboard[7] == 3 ||
+            gameboard[2] + gameboard[5] + gameboard[8] == 3 ||
+            gameboard[0] + gameboard[4] + gameboard[8] == 3 ||
+            gameboard[2] + gameboard[4] + gameboard[6] == 3 {
+                winnerLabel.text = "Congrats Red Won!"
+                winnerLabel.backgroundColor = UIColor.red
+                winnerLabel.isHidden = false
+        } else if
+            gameboard[0] + gameboard[1] + gameboard[2] == -3 ||
+            gameboard[0] + gameboard[1] + gameboard[2] == -3 ||
+            gameboard[3] + gameboard[4] + gameboard[5] == -3 ||
+            gameboard[6] + gameboard[7] + gameboard[8] == -3 ||
+            gameboard[0] + gameboard[3] + gameboard[6] == -3 ||
+            gameboard[1] + gameboard[4] + gameboard[7] == -3 ||
+            gameboard[2] + gameboard[5] + gameboard[8] == -3 ||
+            gameboard[0] + gameboard[4] + gameboard[8] == -3 ||
+            gameboard[2] + gameboard[4] + gameboard[6] == -3 {
+                winnerLabel.text = "Congrats Blue Won!"
+                winnerLabel.backgroundColor = UIColor.blue
+                winnerLabel.isHidden = false
+        } else {
+            for i in 0...8 {
+                if gameboard[i] == 0 {
+                    tie = false
+                    break
+                }
+                else {
+                    tie = true
+                }
+            }
+            
+            if tie == true {
+                winnerLabel.text = "Stick to Rock, Paper, Scissors"
+                winnerLabel.backgroundColor = UIColor.orange
+                winnerLabel.isHidden = false
+            }
+        }
     }
     
     @IBAction func reset(_ sender: Any) {
@@ -63,7 +114,10 @@ class ViewController: UIViewController {
         buttonBottomCenter.backgroundColor = buttonColor
         buttonBottomRight.backgroundColor = buttonColor
         
+        gameboard = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         winnerLabel.isHidden = true
     }
-    
 }
+
+
+
